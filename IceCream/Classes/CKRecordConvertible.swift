@@ -69,6 +69,12 @@ extension CKRecordConvertible where Self: Object {
             } else {
                 assertionFailure("\(primaryKeyProperty.name)'s value should be Int type")
             }
+        case .objectId:
+            if let primaryValueObjectId = self[primaryKeyProperty.name] as? ObjectId {
+                return CKRecord.ID(recordName: primaryValueObjectId.stringValue, zoneID: Self.zoneID)
+            } else {
+                assertionFailure("\(primaryKeyProperty.name)'s value should be ObjectId type")
+            }
         default:
             assertionFailure("Primary key should be String or Int")
         }
@@ -148,6 +154,13 @@ extension CKRecordConvertible where Self: Object {
             switch prop.type {
             case .int, .string, .bool, .date, .float, .double, .data:
                 r[prop.name] = item as? CKRecordValue
+            case .objectId:
+                if let item = item as? ObjectId {
+                    r[prop.name] = item.stringValue
+                }
+                else {
+                    r[prop.name] = nil
+                }
             case .object:
                 guard let objectName = prop.objectClassName else { break }
                 // If object is CreamAsset, set record with its wrapped CKAsset value
