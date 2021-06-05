@@ -154,7 +154,7 @@ extension CKRecordRecoverable where Self: Object {
                     recordValue = nil
                 }
             default:
-                print("Other types will be supported in the future.")
+                print("Other types will be supported in the future: \(prop.type)")
             }
             if recordValue != nil || (recordValue == nil && prop.isOptional) {
                 o.setValue(recordValue, forKey: prop.name)
