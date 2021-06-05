@@ -146,6 +146,13 @@ extension CKRecordRecoverable where Self: Object {
                     }
                     // Because we use the primaryKey as recordName when object converting to CKRecord
                 }
+            case .objectId:
+                if let s = record.value(forKey: prop.name) as? String {
+                    recordValue = try? ObjectId(string: s)
+                }
+                else {
+                    recordValue = nil
+                }
             default:
                 print("Other types will be supported in the future.")
             }
@@ -169,6 +176,8 @@ extension CKRecordRecoverable where Self: Object {
             return recordID.recordName
         case .int:
             return Int(recordID.recordName)
+        case .objectId:
+            return try! ObjectId(string:recordID.recordName)
         default:
             fatalError("The type of object primaryKey should be String or Int")
         }
